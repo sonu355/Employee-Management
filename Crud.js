@@ -80,4 +80,21 @@ const searchResults = document.getElementById('searchResults');
 
 searchInput.addEventListener('input', searchEmployees);
 
+function searchEmployees(event){
+  let employees = JSON.parse(localStorage.getItem("employees")) || [];
+  let userInput = event.target.value;
+  let searchedEmployees = searchLocalStorage(userInput)
+  console.log(searchedEmployees)
+  localStorage.setItem("employees", JSON.stringify(searchedEmployees))
+  displayEmployeeTable()
+  
+}
+
+function searchLocalStorage(input){
+  let employees = JSON.parse(localStorage.getItem("employees")) || [];
+  return employees.filter(function(item) {
+    return item.name.includes(input)
+  })
+}
+
 
