@@ -73,11 +73,133 @@ function displayEmployeeTable() {
 
 displayEmployeeTable();
 
+
 var form = document.getElementById("employeeForm");
 form.addEventListener("submit", onFormSubmit);
+
+
+// function searchEmployees(event){
+//   let employees = JSON.parse(localStorage.getItem("employees")) || [];
+//   let userInput = event.target.value;
+//   let searchedEmployees = searchLocalStorage(userInput)
+//   console.log(searchedEmployees)
+//   localStorage.setItem("employees", JSON.stringify(searchedEmployees))
+//   displayEmployeeTable()
+// }
+
+// function searchLocalStorage(input){
+//   let employees = JSON.parse(localStorage.getItem("employees")) || [];
+//   return employees.filter(function(item) {
+//     return item.name.includes(input)
+//   })
+// }
+
+const allTr = document.querySelectorAll("#employeeTableBody tr")
 const searchInput = document.getElementById('searchInput');
-const searchResults = document.getElementById('searchResults');
+const tableBody = document.getElementById("employeeTableBody");
+searchInput.addEventListener('input', searchResults);
 
-searchInput.addEventListener('input', searchEmployees);
+function searchResults(event){
+  const searchStr = event.target.value.toLowerCase()
+  tableBody.innerHTML = ""
+  allTr.forEach((tr) => {
+          const td_in_tr = tr.querySelectorAll("td")
+          if(td_in_tr[0].innerText.toLowerCase().indexOf(searchStr) > -1){
+              tableBody.appendChild(tr)
+          } 
+  })
+  if(tableBody.innerHTML == ""){
+      tableBody.innerHTML = "No employees found"
+  }
+  if(searchInput == " "){
+    displayRecords()
+    generatePage()
+  }
+}
 
 
+let total_records_tr = document.querySelectorAll("#employeeTableBody tr")
+let total_records = total_records_tr.length
+let records_per_page = 5;
+let page_number = 1;
+let total_page = Math.ceil(total_records/records_per_page)
+
+generatePage()
+displayRecords()
+
+function displayRecords(){
+  var tableBody = document.getElementById("employeeTableBody");
+
+  let startIndex = (page_number -1 ) * records_per_page;
+  let endIndex = startIndex + (records_per_page -1)
+  if(endIndex >= total_records){
+      endIndex = total_records -1
+  }
+  let statement = '';
+  for(let i = startIndex; i<=endIndex; i++){
+      statement += `<tr>${total_records_tr[i].innerHTML}</tr>`
+  }
+  tableBody.innerHTML = statement;
+  document.querySelectorAll(".dynamic-item").forEach((item) => {
+      item.classList.remove("active")
+  })
+
+ if(page_number == 1){
+  document.getElementById("prevBtn").parentElement.classList.add("disabled")
+ }else{
+  document.getElementById("prevBtn").parentElement.classList.remove("disabled")
+
+ }
+
+ if(page_number == total_page){
+  document.getElementById("nextBtn").parentElement.classList.add("disabled")
+
+ }else{
+  document.getElementById("nextBtn").parentElement.classList.remove("disabled")
+
+ }
+
+ document.getElementById("page-details").innerHTML = `showing ${startIndex + 1} to ${endIndex + 1} of ${total_records}`
+
+}
+
+function generatePage (){
+  let prevBtn =   `<li class="page-item ">
+  <a href="javascript:void(0)" id="prevBtn" class="page-link" onclick="prevBtn()">Previous</a>
+</li>`
+  let nextBtn = ` <li class="page-item"><a id="nextBtn" href="javascript:void(0)" class="page-link" onclick ="nextBtn()">
+  Next
+</a></li>`
+  let buttons = "";
+  let activeClass = "";
+
+  for(let i = 1; i<= total_page;  i++){
+      if(i == 1){
+          activeClass = "active"
+      }else{
+          activeClass = ""
+      }
+      buttons += `<li class="page-item dynamic-item ${activeClass}" id="page${i}">
+      <a href="#" class="page-link">
+          ${i}
+      </a>
+  </li>`
+  }
+ document.getElementById("pagination").innerHTML = `${prevBtn}  ${nextBtn}`
+
+}
+
+function prevBtn(){
+  page_number--;
+  displayRecords()
+}
+
+function nextBtn(){
+  page_number++;
+  displayRecords()
+}
+// (employee) => (
+//   if(employee.name.includes(userInput){
+//     console.log(employee.name)
+//   })
+// )

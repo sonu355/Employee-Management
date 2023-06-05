@@ -10,6 +10,7 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <title>CRUD Operation</title>
   <link rel="stylesheet" href="./Crud.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -17,7 +18,8 @@
     <img src="/logo.png" alt="" id="logo">
     <div class="search-bar">
       <input type="text" placeholder="Search employee by name" id="searchInput">
-      <ul id="searchResults"></ul>
+      <ul id="searchResults">
+      </ul>
     </div>
     <nav>
       <label for="menuToggle" id="menuToggleLabel">&#9776;</label>
@@ -69,7 +71,19 @@
       <tbody id="employeeTableBody"></tbody>
     </table>
     <div id="buttons"></div>
-
+    <div class="row paginationButtons">
+      <div class="col">
+        <div id="page-details">
+            
+        </div>
+    </div>
+      <div class="col">
+        <nav class="d-flex justify-content-center">
+            <ul class="pagination" id="pagination">
+               
+            </ul>
+    </div>
+    </div>
   <footer>
     <div class="footer-content">
       <span class="footer-text">&copy; 2023 All Rights Reserved</span>

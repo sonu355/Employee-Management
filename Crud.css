@@ -251,3 +251,21 @@ footer {
 #buttons{
   display: inline !important;
 }
+
+.invisible {
+  opacity: 0;
+}
+
+.paginationButtons{
+display: flex;
+justify-content: center;  
+align-items: center;
+}
+
+#page-details{
+  padding-left: 530px;
+}
+
+.pagination{
+  padding-right: 470px;
+}
