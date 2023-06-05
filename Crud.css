@@ -269,3 +269,7 @@ align-items: center;
 .pagination{
   padding-right: 470px;
 }
+
+.hidden-index{
+  display:  none;
+}

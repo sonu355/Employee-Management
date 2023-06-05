@@ -1,5 +1,12 @@
 var editingEmployeeIndex = -1;
 var editingEmployeeIndex = -1;
+var totalEmployees = 0;
+
+function currentEmployeesCount(){
+  var employees = JSON.parse(localStorage.getItem("employees")) || []
+  return employees.length;
+}
+
 
 function onFormSubmit(event) {
   event.preventDefault();
@@ -7,16 +14,37 @@ function onFormSubmit(event) {
   var position = document.getElementById("position").value;
   var about = document.getElementById("about").value;
   var joiningDate = document.getElementById("joining_date").value;
+  
   var employee = {
+    index: currentEmployeesCount() + 1,
     name: name,
     position: position,
     about: about,
     joiningDate: joiningDate
   };
+
+  const indexObject = document.getElementById("index");
+  console.log(indexObject) 
+  const id = indexObject?.value
   var employees = JSON.parse(localStorage.getItem("employees")) || [];
-  if (editingEmployeeIndex !== -1) {
-    employees[editingEmployeeIndex] = employee;
-    editingEmployeeIndex = -1;
+  if (id !== null) {
+    let employeeToEdit = employees.filter((employee) => employee.index == id)[0]
+    console.log("employee", employeeToEdit)
+    employeeToEdit.name = name;
+    employeeToEdit.position = position;
+    employeeToEdit.about = about;
+    employeeToEdit.joiningDate = joiningDate;
+    for(var i = 0; i < employee.length; i++){
+      if(employee[i].index === employeeToEdit.index){
+         employee[i] = employeeToEdit
+      }
+    }
+    localStorage.setItem("employees", JSON.stringify(employees));
+
+    // employees[index].name = name;
+    // employees[index].position = position;
+    // employees[index].about = about;
+    // employees[index].joiningDate = joiningDate;
   } else {
     employees.push(employee);
   }
@@ -34,23 +62,36 @@ function clearFormFields() {
 
 function editEmployee(index) {
   var employees = JSON.parse(localStorage.getItem("employees")) || [];
-  if (index >= 0 && index < employees.length) {
-    var employee = employees[index];
-    document.getElementById("name").value = employee.name;
-    document.getElementById("position").value = employee.position;
-    document.getElementById("about").value = employee.about;
-    document.getElementById("joining_date").value = employee.joiningDate;
-    editingEmployeeIndex = index;
-  }
+ 
+  var employee = employees.filter(obj => {
+    console.log("Current Inde", obj)
+    if (obj.index === index) {
+      return true
+    }
+  })[0];
+  document.getElementById("name").value = employee.name;
+  document.getElementById("index").value = employee.index;
+  document.getElementById("position").value = employee.position;
+  document.getElementById("about").value = employee.about;
+  document.getElementById("joining_date").value = employee.joiningDate;
+
+  
 }
 
 function deleteEmployee(index) {
   var employees = JSON.parse(localStorage.getItem("employees")) || [];
-  if (index >= 0 && index < employees.length) {
-    employees.splice(index, 1);
-    localStorage.setItem("employees", JSON.stringify(employees));
+  
+    // employees.splice(index, 1);
+    console.log(employees, "empbefore")
+    const newEmployees = employees.filter(obj => {
+      console.log("Current Inde", obj)
+      if (obj.index !== index) {
+        return true
+      }
+    })
+    console.log(employees, "Emp", newEmployees, typeof(employees))
+    localStorage.setItem("employees", JSON.stringify(newEmployees));
     displayEmployeeTable();
-  }
 }
 
 function displayEmployeeTable() {
@@ -64,8 +105,8 @@ function displayEmployeeTable() {
       <td>${employee.position}</td>
       <td>${employee.about}</td>
       <td>${employee.joiningDate}</td>
-      <td><button onclick="editEmployee(${index})">Edit</button></td>
-      <td><button onclick="deleteEmployee(${index})">Delete</button></td>
+      <td><button onclick="editEmployee(${employee.index})">Edit</button></td>
+      <td><button onclick="deleteEmployee(${employee.index})">Delete</button></td>
     `;
     tableBody.appendChild(row);
   });
