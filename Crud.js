@@ -75,25 +75,45 @@ displayEmployeeTable();
 
 var form = document.getElementById("employeeForm");
 form.addEventListener("submit", onFormSubmit);
+
+
+// function searchEmployees(event){
+//   let employees = JSON.parse(localStorage.getItem("employees")) || [];
+//   let userInput = event.target.value;
+//   let searchedEmployees = searchLocalStorage(userInput)
+//   console.log(searchedEmployees)
+//   localStorage.setItem("employees", JSON.stringify(searchedEmployees))
+//   displayEmployeeTable()
+// }
+
+// function searchLocalStorage(input){
+//   let employees = JSON.parse(localStorage.getItem("employees")) || [];
+//   return employees.filter(function(item) {
+//     return item.name.includes(input)
+//   })
+// }
+
+const allTr = document.querySelectorAll("#employeeTableBody tr")
 const searchInput = document.getElementById('searchInput');
-const searchResults = document.getElementById('searchResults');
+const tableBody = document.getElementById("employeeTableBody");
+searchInput.addEventListener('input', searchResults);
 
-searchInput.addEventListener('input', searchEmployees);
-
-function searchEmployees(event){
-  let employees = JSON.parse(localStorage.getItem("employees")) || [];
-  let userInput = event.target.value;
-  let searchedEmployees = searchLocalStorage(userInput)
-  console.log(searchedEmployees)
-  localStorage.setItem("employees", JSON.stringify(searchedEmployees))
-  displayEmployeeTable()
-}
-
-function searchLocalStorage(input){
-  let employees = JSON.parse(localStorage.getItem("employees")) || [];
-  return employees.filter(function(item) {
-    return item.name.includes(input)
+function searchResults(event){
+  const searchStr = event.target.value.toLowerCase()
+  tableBody.innerHTML = ""
+  allTr.forEach((tr) => {
+          const td_in_tr = tr.querySelectorAll("td")
+          if(td_in_tr[0].innerText.toLowerCase().indexOf(searchStr) > -1){
+              tableBody.appendChild(tr)
+          } 
   })
+  if(tableBody.innerHTML == ""){
+      tableBody.innerHTML = "No employees found"
+  }
+  if(searchInput == " "){
+    displayRecords()
+    generatePage()
+  }
 }
 
 
