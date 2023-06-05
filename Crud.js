@@ -73,6 +73,7 @@ function displayEmployeeTable() {
 
 displayEmployeeTable();
 
+
 var form = document.getElementById("employeeForm");
 form.addEventListener("submit", onFormSubmit);
 
@@ -157,6 +158,8 @@ function displayRecords(){
   document.getElementById("nextBtn").parentElement.classList.remove("disabled")
 
  }
+
+ document.getElementById("page-details").innerHTML = `showing ${startIndex + 1} to ${endIndex + 1} of ${total_records}`
 
 }
 
